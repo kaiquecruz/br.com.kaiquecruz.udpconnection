@@ -67,10 +67,10 @@ public class UdpConnection extends CordovaPlugin {
      *    This method is used to send a text message to the server and get the response.
      *
      *    @param    callbackContext        A Cordova callback context
-     *    @param    data                JSON Array, with [0] being SSID to remove
+     *    @param    data                JSON Array, with [0] being message (string)
      *    @return   if true returns the server's message response, false if failed
      */
-    private boolean clientSendAndListen(CallbackContext callbackContext, JSONArray data) {
+    private boolean clientSendAndListen(CallbackContext callbackContext, JSONArray data) throws JSONException {
         Log.d(TAG, "UdpConnection: clientSendAndListen entered.");
         boolean run = true;
 		try {

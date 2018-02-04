@@ -38,7 +38,6 @@ public class UdpConnection extends CordovaPlugin {
     private static final String CLIENT_SEND_AND_LISTEN = "clientSendAndListen";
     private String ip_server = "255.255.255.255";
     private int port_server = 5000, port_client = 4999;
-    private DatagramSocket udpSocket;	
     private CallbackContext callbackContext;
 	private static final String TAG = "UDP_CONNECTION";
     
@@ -74,21 +73,22 @@ public class UdpConnection extends CordovaPlugin {
         Log.d(TAG, "UdpConnection: clientSendAndListen entered.");
         boolean run = true;
 		try {
-			this.udpSocket = new DatagramSocket(this.port_client);
+			DatagramSocket udpSocket = new DatagramSocket(this.port_client);
 			InetAddress serverAddr = InetAddress.getByName(this.ip_server);
 			byte[] buf = data.getString(0).getBytes();
 			DatagramPacket packet = new DatagramPacket(buf, buf.length, serverAddr, this.port_server);
-			this.udpSocket.send(packet);
+			udpSocket.send(packet);
 			while (run) {
 				try {
 					byte[] message = new byte[10000];
 					DatagramPacket packetII = new DatagramPacket(message,message.length);
 					Log.i(TAG, "UDP client: about to wait to receive");
-					this.udpSocket.setSoTimeout(10000);//10s
-					this.udpSocket.receive(packetII);
+					udpSocket.setSoTimeout(10000);//10s
+					udpSocket.receive(packetII);
 					String text = new String(message, 0, packetII.getLength());
 					
 					Log.d(TAG, "Received text: "+ text);
+					udpSocket.close();
 					
 					callbackContext.success(text);
 					
@@ -96,7 +96,7 @@ public class UdpConnection extends CordovaPlugin {
 				} catch (IOException e) {
 					Log.e(TAG, "Error: "+ e);
 					run = false;
-					this.udpSocket.close();
+					udpSocket.close();
 					
 					callbackContext.error(e.getMessage());
 					
@@ -105,20 +105,22 @@ public class UdpConnection extends CordovaPlugin {
 			}
 		} catch (SocketException e) {
 			Log.e(TAG, "Error: "+ e);
+			udpSocket.close();
 			callbackContext.error(e.getMessage());
 			return false;
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
 			Log.e(TAG, "Error: "+ e);
+			udpSocket.close();
 			callbackContext.error(e.getMessage());
 			return false;
 		} catch (IOException e) {
-			e.printStackTrace();
 			Log.e(TAG, "Error: "+ e);
+			udpSocket.close();
 			callbackContext.error(e.getMessage());
 			return false;
         }  catch (JSONException e) {
 			Log.e(TAG, "Error: "+ e);
+			udpSocket.close();
 			callbackContext.error(e.getMessage());
 			return false;
         }

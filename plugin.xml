@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 				xmlns:android="http://schemas.android.com/apk/res/android"
 				id="br.com.kaiquecruz.udpconnection"
-				version="1.0.5">
+				version="1.0.6">
 	
 	<name>UDP Connection</name>
 	<description>This plugin allows Cordova applications to send and receive data from udp socket.</description>

@@ -70,7 +70,7 @@ public class UdpConnection extends CordovaPlugin {
      *    @param    data                JSON Array, with [0] being message (string)
      *    @return   if true returns the server's message response, false if failed
      */
-    private boolean clientSendAndListen(CallbackContext callbackContext, JSONArray data) throws JSONException {
+    private boolean clientSendAndListen(CallbackContext callbackContext, JSONArray data) {
         Log.d(TAG, "UdpConnection: clientSendAndListen entered.");
         boolean run = true;
 		try {
@@ -117,7 +117,13 @@ public class UdpConnection extends CordovaPlugin {
 			Log.e(TAG, "Error: "+ e);
 			callbackContext.error(e.getMessage());
 			return false;
+        }  catch (JSONException e) {
+			Log.e(TAG, "Error: "+ e);
+			callbackContext.error(e.getMessage());
+			return false;
         }
+		
+		return false;
     }
 	
 }

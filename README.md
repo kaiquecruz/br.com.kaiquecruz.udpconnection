@@ -18,6 +18,22 @@ This method is used to send a text message to the server and get the response.
 
 ### Changelog:
 
+#### v1.0.4
+
+- Logic ajust.
+
+#### v1.0.3
+
+- Logic ajust.
+
+#### v1.0.2
+
+- Logic ajust.
+
+#### v1.0.1
+
+- Logic ajust.
+
 #### v1.0.0
 
-- Initial commit
+- Initial commit.

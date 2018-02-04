@@ -1,4 +1,7 @@
 *.log
 .idea
 .DS_Store
+*.cmd
 node_modules/
+cordova
+ionic

@@ -49,7 +49,7 @@ public class UdpConnection extends CordovaPlugin {
         
         this.callbackContext = callbackContext;
         
-        else if(action.equals(CLIENT_SEND_AND_LISTEN)) {
+        if(action.equals(CLIENT_SEND_AND_LISTEN)) {
             return this.clientSendAndListen(callbackContext, data);
         }
         else {

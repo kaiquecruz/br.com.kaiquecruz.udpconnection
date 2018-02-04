@@ -20,6 +20,10 @@ import org.apache.cordova.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -79,18 +83,18 @@ public class UdpConnection extends CordovaPlugin {
 				try {
 					byte[] message = new byte[10000];
 					DatagramPacket packetII = new DatagramPacket(message,message.length);
-					Log.i(TAG, "UDP client: ", "about to wait to receive");
+					Log.i(TAG, "UDP client: about to wait to receive");
 					this.udpSocket.setSoTimeout(10000);//10s
 					this.udpSocket.receive(packetII);
 					String text = new String(message, 0, packetII.getLength());
 					
-					Log.d(TAG, "Received text", text);
+					Log.d(TAG, "Received text: "+ text);
 					
 					callbackContext.success(text);
 					
 					return true;
 				} catch (IOException e) {
-					Log.e(TAG, "error: ", e);
+					Log.e(TAG, "Error: "+ e);
 					run = false;
 					this.udpSocket.close();
 					
@@ -100,17 +104,17 @@ public class UdpConnection extends CordovaPlugin {
 				}
 			}
 		} catch (SocketException e) {
-			Log.e(TAG, "Error:", e);
+			Log.e(TAG, "Error: "+ e);
 			callbackContext.error(e.getMessage());
 			return false;
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
-			Log.e(TAG, "Error:", e);
+			Log.e(TAG, "Error: "+ e);
 			callbackContext.error(e.getMessage());
 			return false;
 		} catch (IOException e) {
 			e.printStackTrace();
-			Log.e(TAG, "Error:", e);
+			Log.e(TAG, "Error: "+ e);
 			callbackContext.error(e.getMessage());
 			return false;
         }

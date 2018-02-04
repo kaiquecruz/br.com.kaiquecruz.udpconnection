@@ -1,0 +1,25 @@
+{
+  "name": "br.com.kaiquecruz.udpconnection",
+  "version": "1.0.0",
+  "description": "This plugin allows Cordova applications to send and receive data from udp socket.",
+  "cordova": {
+    "id": "br.com.kaiquecruz.udpconnection",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaiquecruz/br.com.kaiquecruz.udpconnection.git"
+  },
+  "keywords": [
+	"cordova",
+    "phonegap",
+    "network",
+    "udp",
+    "socket"
+  ],
+  "author": "Kaique Cruz",
+  "license": "Apache 2.0",
+  "homepage": "https://github.com/kaiquecruz/br.com.kaiquecruz.udpconnection#readme"
+}

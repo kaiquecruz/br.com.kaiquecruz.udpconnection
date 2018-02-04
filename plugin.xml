@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+				xmlns:android="http://schemas.android.com/apk/res/android"
+				id="br.com.kaiquecruz.udpconnection"
+				version="1.0.0">
+	
+	<name>UDP Connection</name>
+	<description>This plugin allows Cordova applications to send and receive data from udp socket.</description>
+	<author>Kaique Cruz</author>
+	<keywords>cordova,phonegap,network,udp,socket</keywords>
+	<license>Apache 2.0</license>
+	<repo>https://github.com/kaiquecruz/br.com.kaiquecruz.udpconnection</repo>
+	
+	<js-module src="www/UdpConnection.js" name="UdpConnection">
+		<clobbers target="window.UdpConnection"/>
+	</js-module>
+	
+	<platform name="android">		
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.INTERNET"/>
+			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+			<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+			<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>			
+		</config-file>
+		
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="UdpConnection">
+				<param name="android-package" value="br.com.kaiquecruz.udpconnection.UdpConnection" />
+				<param name="onload" value="true" />
+			</feature>
+		</config-file>
+		
+		<source-file src="src/android/src/br/com/kaiquecruz/udpconnection/UdpConnection.java" target-dir="src/br/com/udpconnection/UdpConnection" />
+	</platform>
+
+</plugin>

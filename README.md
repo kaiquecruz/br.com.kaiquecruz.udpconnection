@@ -18,6 +18,9 @@ This method is used to send a text message to the server and get the response.
 
 ### Changelog:
 
+#### v1.1.0
+- Logic ajust.
+
 #### v1.0.9
 - Logic ajust.
 
@@ -26,6 +29,7 @@ This method is used to send a text message to the server and get the response.
 
 #### v1.0.7
 - iOS support.
+
 #### v1.0.6
 - Connection close error ajust.
 
@@ -33,7 +37,6 @@ This method is used to send a text message to the server and get the response.
 - Logic ajust.
 
 #### v1.0.4
-
 - Logic ajust.
 
 #### v1.0.3

@@ -6,16 +6,8 @@
 	var socketClient:GCDAsyncUdpSocket!
    
     func clientSendAndListen(command: CDVInvokedUrlCommand) {
-        var pluginResult = CDVPluginResult(
-            status: CDVCommandStatus_ERROR
-        )
-
         let msg = command.arguments[0] as? String ?? ""
 
-		setupConnection(msg)
-    }
-	
-	func setupConnection(message:String){
 		var error : NSError?
 		socketServer = GCDAsyncUdpSocket(delegate: self, delegateQueue: dispatch_get_main_queue())
 		socketServer.bindToPort(PORTSERVER, error: &error)
@@ -27,7 +19,7 @@
 		socketClient.connectToHost(IPSERVER, onPort: PORTSERVER, error: &error)		
 		socketClient.beginReceiving(&error)
 		
-		let data = message.dataUsingEncoding(NSUTF8StringEncoding)
+		let data = msg.dataUsingEncoding(NSUTF8StringEncoding)
 		socketClient.sendData(data, withTimeout: 10, tag: 0)		
 	}
 

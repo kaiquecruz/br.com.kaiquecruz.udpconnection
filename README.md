@@ -18,6 +18,10 @@ This method is used to send a text message to the server and get the response.
 
 ### Changelog:
 
+#### v1.0.7
+
+- iOS support.
+
 #### v1.0.6
 
 - Connection close error ajust.

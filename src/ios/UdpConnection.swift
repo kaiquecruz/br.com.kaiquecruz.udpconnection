@@ -1,4 +1,4 @@
-@objc(UdpConnection) class UdpConnection : CDVPlugin {
+@objc(UdpConnection) class UdpConnection : NSObject, GCDAsyncUdpSocketDelegate, CDVPlugin {
 	let IPSERVER = "255.255.255.255"
 	let PORTCLIENT:UInt16 = 4999
 	let PORTSERVER:UInt16 = 5000

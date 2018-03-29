@@ -18,6 +18,9 @@ This method is used to send a text message to the server and get the response.
 
 ### Changelog:
 
+#### v1.1.1
+- 3s for timeout and iOS support removed.
+
 #### v1.1.0
 - Logic ajust.
 

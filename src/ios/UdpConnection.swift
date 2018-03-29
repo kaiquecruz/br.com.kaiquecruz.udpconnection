@@ -26,7 +26,7 @@
 	func udpSocket(sock: GCDAsyncUdpSocket!, didReceiveData data: NSData!, fromAddress address: NSData!, withFilterContext filterContext: AnyObject!) {		
 		self.commandDelegate!.sendPluginResult(
             status: CDVCommandStatus_OK,
-            messageAsString: data
+            messageAsString: data,
             callbackId: command.callbackId
         )
 	}
@@ -34,7 +34,7 @@
 	func udpSocket(sock: GCDAsyncUdpSocket!, didNotConnect error: NSError!) {
 		self.commandDelegate!.sendPluginResult(
             status: CDVCommandStatus_ERROR,
-            messageAsString: error
+            messageAsString: error,
             callbackId: command.callbackId
         )
 	}
@@ -42,7 +42,7 @@
 	func udpSocket(sock: GCDAsyncUdpSocket!, didNotSendDataWithTag tag: Int, dueToError error: NSError!) {
         self.commandDelegate!.sendPluginResult(
             status: CDVCommandStatus_ERROR,
-            messageAsString: error
+            messageAsString: error,
             callbackId: command.callbackId
         )
 	}

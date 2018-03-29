@@ -84,7 +84,7 @@ public class UdpConnection extends CordovaPlugin {
 					byte[] message = new byte[10000];
 					DatagramPacket packetII = new DatagramPacket(message,message.length);
 					Log.i(TAG, "UDP client: about to wait to receive");
-					this.udpSocket.setSoTimeout(10000);//10s
+					this.udpSocket.setSoTimeout(3000);//3s
 					this.udpSocket.receive(packetII);
 					String text = new String(message, 0, packetII.getLength());
 					

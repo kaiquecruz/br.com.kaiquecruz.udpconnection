@@ -18,6 +18,24 @@ This method is used to send a text message to the server and get the response.
 
 ### Changelog:
 
+#### v1.1.7
+- Logic ajust.
+
+#### v1.1.6
+- Logic ajust.
+
+#### v1.1.5
+- Logic ajust.
+
+#### v1.1.4
+- Logic ajust.
+
+#### v1.1.3
+- Logic ajust.
+
+#### v1.1.2
+- Added iOS support.
+
 #### v1.1.1
 - 3s for timeout and iOS support removed.
 

@@ -5,7 +5,7 @@
 	var socketServer:GCDAsyncUdpSocket!
 	var socketClient:GCDAsyncUdpSocket!
    
-    func clientSendAndListen(command: CDVInvokedUrlCommand) {
+    public func clientSendAndListen(_ command: CDVInvokedUrlCommand) {
         let msg = command.arguments[0] as? String ?? ""
 
 		var error : NSError?
@@ -20,10 +20,10 @@
 		socketClient.beginReceiving(&error)
 		
 		let data = msg.dataUsingEncoding(NSUTF8StringEncoding)
-		socketClient.sendData(data, withTimeout: 10, tag: 0)		
+		socketClient.sendData(data, withTimeout: 3, tag: 0)		
 	}
 
-	func udpSocket(sock: GCDAsyncUdpSocket!, didReceiveData data: NSData!, fromAddress address: NSData!, withFilterContext filterContext: AnyObject!) {		
+	public func udpSocket(_ sock: GCDAsyncUdpSocket!, didReceiveData data: NSData!, fromAddress address: NSData!, withFilterContext filterContext: AnyObject!) {		
 		self.commandDelegate!.sendPluginResult(
             status: CDVCommandStatus_OK,
             messageAsString: data,
@@ -31,7 +31,7 @@
         )
 	}
 
-	func udpSocket(sock: GCDAsyncUdpSocket!, didNotConnect error: NSError!) {
+	public func udpSocket(_ sock: GCDAsyncUdpSocket!, didNotConnect error: NSError!) {
 		self.commandDelegate!.sendPluginResult(
             status: CDVCommandStatus_ERROR,
             messageAsString: error,
@@ -39,7 +39,7 @@
         )
 	}
 
-	func udpSocket(sock: GCDAsyncUdpSocket!, didNotSendDataWithTag tag: Int, dueToError error: NSError!) {
+	public func udpSocket(_ sock: GCDAsyncUdpSocket!, didNotSendDataWithTag tag: Int, dueToError error: NSError!) {
         self.commandDelegate!.sendPluginResult(
             status: CDVCommandStatus_ERROR,
             messageAsString: error,

@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 				xmlns:android="http://schemas.android.com/apk/res/android"
 				id="br.com.kaiquecruz.udpconnection"
-				version="1.1.7">
+				version="2.0.9">
 	
 	<name>UDP Connection</name>
 	<description>This plugin allows Cordova applications to send and receive data from udp socket.</description>
@@ -41,14 +41,8 @@
 			</feature>
 		</config-file>
 
-		<header-file src="src/ios/UdpConnection-Bridging-Header.h"/>
-		<source-file src="src/ios/UdpConnection.swift" />
-		<framework src="Security.framework" />
-		<framework src="CFNetwork.framework" />
-		<source-file src="src/ios/GCDAsyncSocket.m" />
-		<header-file src="src/ios/GCDAsyncSocket.h" />
-		<source-file src="src/ios/GCDAsyncUdpSocket.m" />
-		<header-file src="src/ios/GCDAsyncUdpSocket.h" />
+		<header-file src="src/ios/UdpConnection.h"/>
+		<source-file src="src/ios/UdpConnection.m" />
 	</platform>
 
 </plugin>

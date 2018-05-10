@@ -18,6 +18,9 @@ This method is used to send a text message to the server and get the response.
 
 ### Changelog:
 
+#### v2.1.0
+- Ajust on iOS receive data.
+
 #### v2.0.9
 - Logic ajust.
 

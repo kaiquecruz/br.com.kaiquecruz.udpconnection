@@ -52,6 +52,27 @@
 
 			return;
 		}
+        
+        // bind the port
+        struct sockaddr_in sockaddr;
+        memset(&sockaddr, 0, sizeof(sockaddr));
+        
+        sockaddr.sin_len = sizeof(sockaddr);
+        sockaddr.sin_family = AF_INET;
+        sockaddr.sin_port = htons(4999); //CLIENT PORT
+        sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+        
+        int status = bind(socketSD, (struct sockaddr *)&sockaddr, sizeof(sockaddr));
+        if (status == -1) {
+            close(socketSD);
+            NSLog(@"Error: listenForPackets - bind() failed.");
+            
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error: listenForPackets - bind() failed."];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
+            
+            return;
+        }
+        
 		
 		// Configure the port and ip we want to send to
 		struct sockaddr_in broadcastAddr;
@@ -71,102 +92,63 @@
 
 			return;
 		}
+        
 		
-		close(socketSD);
+        // set timeout to 3 seconds.
+        struct timeval timeV;
+        timeV.tv_sec = 3;
+        timeV.tv_usec = 0;
+        
+        if (setsockopt(socketSD, SOL_SOCKET, SO_RCVTIMEO, &timeV, sizeof(timeV)) == -1) {
+            NSLog(@"Error: listenForPackets - setsockopt failed");
+            close(socketSD);
+            
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error: listenForPackets - setsockopt failed"];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
+            
+            return;
+        }
+
+        
+        // receive
+        struct sockaddr_in receiveSockaddr;
+        socklen_t receiveSockaddrLen = sizeof(receiveSockaddr);
+        
+        size_t bufSize = 10000;
+        void *buf = malloc(bufSize);
+        ssize_t result = recvfrom(socketSD, buf, bufSize, 0, (struct sockaddr *)&receiveSockaddr, &receiveSockaddrLen);
+        
+        NSData *data = nil;
+        
+        NSLog(@"result: %zd", result);
+        
+        if (result > 0) {
+            if ((size_t)result != bufSize) {
+                buf = realloc(buf, result);
+            }
+            data = [NSData dataWithBytesNoCopy:buf length:result freeWhenDone:YES];
+            
+            char addrBuf[INET_ADDRSTRLEN];
+            if (inet_ntop(AF_INET, &receiveSockaddr.sin_addr, addrBuf, (size_t)sizeof(addrBuf)) == NULL) {
+                addrBuf[0] = '\0';
+            }
+            
+            NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            close(socketSD);
+            
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:msg];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
+            
+            
+        } else {
+            free(buf);
+            close(socketSD);
+            
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error receiving UDP packet"];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
+        }
 		
-		dispatch_async(dispatch_get_global_queue(0, 0), ^{
-			[self listenForPackets];
-		});
-		
-	}
-
-	// Sends a message to the IP and port set up in the initializer
-	- (void) listenForPackets {
-		[self.commandDelegate runInBackground:^{
-			int listeningSocket = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-			if (listeningSocket <= 0) {
-				NSLog(@"Error: listenForPackets - socket() failed.");
-
-				pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error: listenForPackets - socket() failed."];
-				[self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
-
-				return;
-			}
-			
-			// set timeout to 3 seconds.
-			struct timeval timeV;
-			timeV.tv_sec = 3;
-			timeV.tv_usec = 0;
-			
-			if (setsockopt(listeningSocket, SOL_SOCKET, SO_RCVTIMEO, &timeV, sizeof(timeV)) == -1) {
-				NSLog(@"Error: listenForPackets - setsockopt failed");
-				close(listeningSocket);
-
-				pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error: listenForPackets - setsockopt failed"];
-				[self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
-
-				return;
-			}
-			
-			// bind the port
-			struct sockaddr_in sockaddr;
-			memset(&sockaddr, 0, sizeof(sockaddr));
-			
-			sockaddr.sin_len = sizeof(sockaddr);
-			sockaddr.sin_family = AF_INET;
-			sockaddr.sin_port = htons(4999); //CLIENT PORT
-			sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-			
-			int status = bind(listeningSocket, (struct sockaddr *)&sockaddr, sizeof(sockaddr));
-			if (status == -1) {
-				close(listeningSocket);
-				NSLog(@"Error: listenForPackets - bind() failed.");
-
-				pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error: listenForPackets - bind() failed."];
-				[self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
-
-				return;
-			}
-			
-			// receive
-			struct sockaddr_in receiveSockaddr;
-			socklen_t receiveSockaddrLen = sizeof(receiveSockaddr);
-			
-			size_t bufSize = 10000;
-			void *buf = malloc(bufSize);
-			ssize_t result = recvfrom(listeningSocket, buf, bufSize, 0, (struct sockaddr *)&receiveSockaddr, &receiveSockaddrLen);
-			
-			NSData *data = nil;
-
-			NSLog(@"result: %zd", result);
-
-			if (result > 0) {
-				if ((size_t)result != bufSize) {
-					buf = realloc(buf, result);
-				}
-				data = [NSData dataWithBytesNoCopy:buf length:result freeWhenDone:YES];
-				
-				char addrBuf[INET_ADDRSTRLEN];
-				if (inet_ntop(AF_INET, &receiveSockaddr.sin_addr, addrBuf, (size_t)sizeof(addrBuf)) == NULL) {
-					addrBuf[0] = '\0';
-				}
-				
-				NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
-				close(listeningSocket);
-				
-				pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:msg];
-				[self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
-				
-				
-			} else {
-				free(buf);
-				close(listeningSocket);
-				
-				pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error receiving UDP packet"];
-				[self.commandDelegate sendPluginResult:pluginResult callbackId:cmd.callbackId];
-			}
-		}];
 	}
 
 @end

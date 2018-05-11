@@ -16,5 +16,6 @@
 @interface UdpConnection : CDVPlugin
 
 - (void)clientSendAndListen:(CDVInvokedUrlCommand*)command;
+- (void)clientSendAndListenCreateProjectOnIOS:(CDVInvokedUrlCommand*)command;
 
 @end

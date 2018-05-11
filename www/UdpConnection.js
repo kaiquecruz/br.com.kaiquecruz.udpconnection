@@ -30,6 +30,13 @@ var UdpConnection = {
             return;
         }
         cordova.exec(win, fail, 'UdpConnection', 'clientSendAndListen', [message]);
+    },
+    clientSendAndListenCreateProjectOnIOS: function(message, win, fail) {
+        if (typeof win != "function") {
+            console.log("clientSendAndListen fourth parameter must be a function to handle the result.");
+            return;
+        }
+        cordova.exec(win, fail, 'UdpConnection', 'clientSendAndListenCreateProjectOnIOS', [message]);
     }
 };
 
